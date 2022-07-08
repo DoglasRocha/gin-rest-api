@@ -1,14 +1,16 @@
 package main
 
 import (
+	"gin-rest-api/database"
 	"gin-rest-api/models"
 	"gin-rest-api/routes"
 )
 
 func main() {
+	database.ConectaComBancoDeDados()
 	models.Alunos = []models.Aluno{
-		{"Doglas", "00000000000", "000000000"},
-		{"Ana", "11111111111", "111111111"},
+		{Nome: "Doglas", CPF: "00000000000", RG: "000000000"},
+		{Nome: "Ana", CPF: "11111111111", RG: "111111111"},
 	}
 	routes.HandleRequests()
 }
