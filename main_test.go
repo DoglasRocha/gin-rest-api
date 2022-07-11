@@ -3,6 +3,7 @@ package main
 import (
 	"gin-rest-api/controllers"
 	"gin-rest-api/database"
+	"gin-rest-api/models"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -12,9 +13,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var ID int
+
 func SetupDasRotasDeTeste() *gin.Engine {
 	rotas := gin.Default()
 	return rotas
+}
+
+func CriaAlunoMock() {
+	aluno := models.Aluno{Nome: "aluno teste", CPF: "12345678910", RG: "12345678"}
+	database.DB.Create(&aluno)
+	ID = int(aluno.ID)
+}
+
+func DeletaAlunoMock() {
+	var aluno models.Aluno
+	database.DB.Delete(&aluno, ID)
 }
 
 func TestVerificaStatusCodeDaSaudacao(t *testing.T) {
@@ -32,6 +46,8 @@ func TestVerificaStatusCodeDaSaudacao(t *testing.T) {
 
 func TestListandoTodosOsAlunosHandler(t *testing.T) {
 	database.ConectaComBancoDeDados()
+	CriaAlunoMock()
+	defer DeletaAlunoMock()
 	r := SetupDasRotasDeTeste()
 	r.GET("/alunos", controllers.ExibeTodosAlunos)
 	req, _ := http.NewRequest("GET", "/alunos", nil)
