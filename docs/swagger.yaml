@@ -1,0 +1,149 @@
+definitions:
+  gin.H:
+    additionalProperties:
+      type: any
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Aluno:
+    properties:
+      cpf:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      nome:
+        type: string
+      rg:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /:nome:
+    get:
+      description: Rota que recebendo um nome, saúda o usuário com o nome fornecido
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: API faz uma saudação
+      tags:
+      - saudacao
+  /alunos:
+    get:
+      description: Rota para exibir todos os alunos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Modelo do aluno
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Exibe todos os alunos
+      tags:
+      - alunos
+    post:
+      consumes:
+      - application/json
+      description: Rota para criar um novo aluno
+      parameters:
+      - description: Modelo do aluno
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Aluno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Cria um novo aluno
+      tags:
+      - aluno
+  /alunos/:id:
+    delete:
+      description: Rota para deletar um aluno, por id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      summary: Deleta um aluno
+      tags:
+      - aluno
+    get:
+      description: Rota para buscar um aluno por id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Busca um aluno por id
+      tags:
+      - aluno
+    patch:
+      consumes:
+      - application/json
+      description: Rota para editar um aluno, por id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Edita um aluno
+      tags:
+      - aluno
+  /alunos/cpf/:cpf:
+    get:
+      description: Rota para buscar um aluno por cpf
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Busca um aluno por cpf
+      tags:
+      - aluno
+swagger: "2.0"
